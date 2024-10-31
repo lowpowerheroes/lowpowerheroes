@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import Header from "@/component/Header/Header";
 
 export const metadata: Metadata = {
   title: {
@@ -11,12 +13,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className="m-0 p-0 bg-black">{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className="p-5 flex flex-col h-screen">
+          <Header />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
