@@ -20,7 +20,7 @@ export const buildRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(builds).values({
         build_name: input.name,
-        build_description: input.description,
+        driver_description: input.description,
         build_tags: input.tags,
         build_images: input.images,
         build_mods: input.mods,
