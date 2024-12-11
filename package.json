@@ -14,6 +14,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.1.6",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.62.7",
     "@trpc/client": "11.0.0-rc.660",
@@ -25,6 +26,7 @@
     "postgres": "^3.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
     "server-only": "^0.0.1",
     "superjson": "^2.2.2",
     "zod": "^3.24.1"
