@@ -18,19 +18,29 @@ import {
  */
 export const createTable = pgTableCreator((name) => `lowpowerheroes_${name}`);
 
-export const posts = createTable(
-  "post",
+export const builds = createTable(
+  "builds",
   {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    build_id: serial("build_id").primaryKey().notNull(),
+    build_name: varchar("build_name", { length: 256 }).notNull(),
+    build_tags: varchar("build_tags", { length: 256 }).array(),
+    build_mods: varchar("build_mods", { length: 256 }).array().notNull(),
+    build_description: varchar("build_description", { length: 256 }).notNull(),
+    build_images: varchar("build_images", { length: 256 }).array().notNull(),
+    driver_descritpion: varchar("driver_descritpion", { length: 256 }),
+    driver_nationality: varchar("driver_nationality", {
+      length: 256,
+    }).notNull(),
+    driver_image: varchar("driver_image", { length: 256 }),
+
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
+      () => new Date(),
     ),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+    nameIndex: index("name_idx").on(example.build_name),
+  }),
 );
