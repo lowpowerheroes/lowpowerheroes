@@ -2,7 +2,7 @@ import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 import { type Metadata } from "next";
-
+import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -19,10 +19,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>
-        <TRPCReactProvider>
-          <Theme>{children}</Theme>
-        </TRPCReactProvider>
+      <body className="dark:bg-slate-800">
+        <ClerkProvider>
+          <TRPCReactProvider>
+            <Theme>{children}</Theme>
+          </TRPCReactProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
