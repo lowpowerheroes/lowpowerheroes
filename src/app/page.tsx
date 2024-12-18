@@ -1,12 +1,14 @@
-import Image from "next/image";
+import Header from "~/components/Header/Header";
+import { api, HydrateClient } from "~/trpc/server";
 
-export default function Home() {
+export default async function Home() {
+  void api.build.getLatest.prefetch();
+
   return (
-    <Image
-      src={"/assets/IMG_0902.png"}
-      height={3456}
-      width={5184}
-      alt="coming soon..."
-    />
+    <HydrateClient>
+      <main>
+        <Header />
+      </main>
+    </HydrateClient>
   );
 }
