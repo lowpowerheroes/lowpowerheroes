@@ -1,8 +1,6 @@
 import "./globals.css";
-import "@radix-ui/themes/styles.css";
-import { Theme } from "@radix-ui/themes";
 import { type Metadata } from "next";
-
+import { ThemeProvider } from "next-themes";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -18,10 +16,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">
         <TRPCReactProvider>
-          <Theme>{children}</Theme>
+          <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
+            {children}
+          </ThemeProvider>
         </TRPCReactProvider>
       </body>
     </html>
