@@ -8,7 +8,16 @@ const Header = () => {
   return (
     <div className="bg-white dark:bg-black flex w-full flex-col items-center">
       <header className="flex w-full justify-between px-60 py-5 align-middle">
-        <div className="h-10">LowPowerHeroes</div>
+        <div className="h-10">
+          <Button variant={"link"} asChild>
+            <Link
+              href={process.env.NEXT_PUBLIC_BASE_URL ?? ""}
+              className="w-full"
+            >
+              LowPowerHeroes
+            </Link>
+          </Button>
+        </div>
         <div className="flex h-10 items-center justify-center space-x-2">
           <Button variant={"link"} asChild>
             <Link
