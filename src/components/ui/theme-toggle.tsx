@@ -10,7 +10,7 @@ const ThemeToggle = () => {
     <Button
       variant={"outline"}
       size={"icon"}
-      className="h-12 w-28 rounded-full"
+      className="h-12 w-28 rounded-lg"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
       <FaSun className="absolute h-10 w-10 rotate-0 scale-100 dark:-rotate-90 dark:scale-0" />

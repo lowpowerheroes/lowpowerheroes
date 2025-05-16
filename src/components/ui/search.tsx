@@ -1,6 +1,7 @@
+import type { FC } from "react";
 import { Input } from "~/components/ui/input";
 
-export default function Component() {
+const Search: FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => {
   return (
     <div className="border-gray-300 bg-gray-50 dark:bg-gray-900 flex w-full max-w-sm items-center space-x-2 rounded-lg border px-3.5 py-2">
       <SearchIcon className="h-4 w-4" />
@@ -8,10 +9,11 @@ export default function Component() {
         type="search"
         placeholder="Search"
         className="h-8 w-full border-0 font-semibold"
+        {...props}
       />
     </div>
   );
-}
+};
 
 function SearchIcon(props: JSX.IntrinsicElements["svg"]) {
   return (
@@ -32,3 +34,5 @@ function SearchIcon(props: JSX.IntrinsicElements["svg"]) {
     </svg>
   );
 }
+
+export default Search;
