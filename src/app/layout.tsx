@@ -1,4 +1,5 @@
 import "./globals.css";
+import "@radix-ui/themes/styles.css";
 import { type Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { TRPCReactProvider } from "~/trpc/react";
