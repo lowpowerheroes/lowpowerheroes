@@ -36,7 +36,11 @@ const Header = () => {
               Upload your build!
             </Link>
           </Button>
-          <Search value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Search
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search builds..."
+          />
           <ThemeToggle />
         </div>
         <div className="flex items-center md:hidden">
@@ -72,6 +76,7 @@ const Header = () => {
               <Search
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search builds..."
               />
               <ThemeToggle />
             </div>
