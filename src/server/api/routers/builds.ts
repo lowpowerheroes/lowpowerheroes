@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { builds } from "~/server/db/schema";
+// import { uploadToImgur } from "~/server/utils/imgur";
+// import { uploadImageToPinterest } from "~/server/utils/pinterest";
 
 export const buildRouter = createTRPCRouter({
   create: publicProcedure
@@ -18,6 +20,28 @@ export const buildRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      // const imgurClientId = process.env.IMGUR_CLIENT_ID!;
+      // const pinterestAccessToken = process.env.PINTEREST_ACCESS_TOKEN!;
+      // const pinterestBoardId = process.env.PINTEREST_BOARD_ID!;
+
+      // const pinterestImageLinks: string[] = [];
+
+      // for (const imageBase64 of input.images) {
+      //   // 1. Upload su Imgur
+      //   const imgurUrl = await uploadToImgur(imageBase64, imgurClientId);
+
+      //   // 2. Crea Pin su Pinterest
+      //   const pinterestUrl = await uploadImageToPinterest({
+      //     accessToken: pinterestAccessToken,
+      //     boardId: pinterestBoardId,
+      //     imageUrl: imgurUrl,
+      //     title: input.name,
+      //     description: input.description,
+      //   });
+
+      //   pinterestImageLinks.push(pinterestUrl);
+      // }
+
       await ctx.db.insert(builds).values({
         build_name: input.name,
         driver_description: input.description,
