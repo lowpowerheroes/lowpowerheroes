@@ -8,8 +8,10 @@ import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { FaBars } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
+import { useUser } from "@clerk/nextjs";
 
 const Header = () => {
+  const { isLoaded, isSignedIn } = useUser();
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
 
@@ -29,12 +31,14 @@ const Header = () => {
         <div className="hidden h-10 items-center justify-center space-x-2 md:flex">
           <Button variant={"outline"} asChild className="h-12">
             <Link
-              href={
-                "mailto:lowwpowerheroes@gmail.com?subject=Upload%20your%20build"
-              }
+              href={`${
+                isLoaded && isSignedIn
+                  ? "/admin/create"
+                  : "mailto:lowwpowerheroes@gmail.com?subject=Upload%20your%20build"
+              }`}
               className="w-full"
             >
-              Upload your build!
+              {`${isLoaded && isSignedIn ? "Create a new build" : "Upload your build!"} `}
             </Link>
           </Button>
           <Search
@@ -65,12 +69,14 @@ const Header = () => {
           <div className="mt-5 flex w-full flex-wrap items-center px-4 md:hidden">
             <Button variant={"outline"} asChild className="mb-5 w-full">
               <Link
-                href={
-                  "mailto:lowwpowerheroes@gmail.com?subject=Upload%20your%20build"
-                }
+                href={`${
+                  isLoaded && isSignedIn
+                    ? "/admin/create"
+                    : "mailto:lowwpowerheroes@gmail.com?subject=Upload%20your%20build"
+                }`}
                 className="w-full"
               >
-                Upload your build!
+                {`${isLoaded && isSignedIn ? "Create a new build" : "Upload your build!"} `}
               </Link>
             </Button>
             <div className="flex w-full flex-row items-center justify-between space-x-2">
