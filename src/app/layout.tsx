@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
+import Header from "~/components/ui/header";
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,7 @@ export default function RootLayout({
               enableSystem
               defaultTheme="system"
             >
+              <Header />
               {children}
             </ThemeProvider>
           </TRPCReactProvider>

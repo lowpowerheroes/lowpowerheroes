@@ -12,6 +12,7 @@ import { FaXmark } from "react-icons/fa6";
 const Header = () => {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
+
   return (
     <div className="bg-white dark:bg-black flex w-full flex-col items-center">
       <header className="flex w-full flex-row flex-wrap justify-between px-4 py-5 align-middle sm:px-8 md:justify-between md:px-16 lg:px-32 xl:px-60">
