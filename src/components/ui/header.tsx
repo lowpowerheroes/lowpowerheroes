@@ -8,7 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { FaBars } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import { useUser } from "@clerk/nextjs";
+import { SignOutButton, useUser, UserButton } from "@clerk/nextjs";
 
 const Header = () => {
   const { isLoaded, isSignedIn } = useUser();
@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <div className="bg-white dark:bg-black flex w-full flex-col items-center">
-      <header className="flex w-full flex-row flex-wrap justify-between px-4 py-5 align-middle sm:px-8 md:justify-between md:px-16 lg:px-32 xl:px-60">
+      <header className="flex w-full flex-row flex-wrap justify-between px-4 py-5 sm:px-8 md:justify-between md:px-16 lg:px-32 xl:px-60">
         <div className="h-10">
           <Button variant={"link"} asChild>
             <Link
@@ -47,6 +47,18 @@ const Header = () => {
             placeholder="Search builds..."
           />
           <ThemeToggle />
+          {isLoaded && isSignedIn && (
+            <div className="hidden md:flex">
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "h-10 w-10",
+                    userButtonAvatarImage: "h-10 w-10",
+                  },
+                }}
+              />
+            </div>
+          )}
         </div>
         <div className="flex items-center md:hidden">
           <Button
@@ -87,6 +99,11 @@ const Header = () => {
               />
               <ThemeToggle />
             </div>
+            <SignOutButton>
+              <Button variant={"outline"} className="mt-5 w-full">
+                Sign out
+              </Button>
+            </SignOutButton>
           </div>
         )}
       </header>
