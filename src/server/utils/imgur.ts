@@ -1,3 +1,5 @@
+import type { ImgurUploadResponse } from "../types/imgur";
+
 export async function uploadToImgur(
   imageBase64: string,
   clientId: string,
@@ -11,7 +13,7 @@ export async function uploadToImgur(
     body: JSON.stringify({ image: imageBase64 }),
   });
 
-  const data = await response.json();
-  if (!data.success) throw new Error("Imgur upload failed");
-  return data.data.link as string;
+  const data = (await response.json()) as ImgurUploadResponse;
+  if (!data.success) throw new Error("Upload to Imgur failed");
+  return data.data.link;
 }
