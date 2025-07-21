@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 const useMenu = () => {
-    const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen)
-    }
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
-    return { menuOpen, toggleMenu }
-}
+  return { menuOpen, toggleMenu };
+};
 
-export default useMenu
+export default useMenu;
