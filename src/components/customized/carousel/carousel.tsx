@@ -9,19 +9,26 @@ import {
   type CarouselApi,
 } from "~/components/ui/carousel";
 
-export default function Component() {
+type CarouselWithThumbsProps = {
+  images?: string[];
+};
+
+export default function Component({ images }: CarouselWithThumbsProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
+  const imagesToShow =
+    images && images.length > 0
+      ? images
+      : new Array(5).fill(
+          "https://g-8fhjeqorrz8.vusercontent.net/placeholder.svg",
+        );
 
+  useEffect(() => {
+    if (!api) return;
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
-
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1);
     });
@@ -31,10 +38,10 @@ export default function Component() {
     <div className="max-h-2xl max-w-3xl">
       <Carousel className="relative" setApi={setApi}>
         <CarouselContent>
-          {new Array(5).fill(0).map((_v, idx) => (
+          {imagesToShow.map((img: string, idx: number) => (
             <CarouselItem key={idx + "carousel"}>
               <Image
-                src="https://g-8fhjeqorrz8.vusercontent.net/placeholder.svg"
+                src={img.startsWith("data:") ? img : img}
                 alt={`Carousel Image ${idx}`}
                 width={800}
                 height={500}
@@ -54,15 +61,15 @@ export default function Component() {
         </div>
       </Carousel>
       <div className="mt-4 flex justify-center gap-4">
-        {new Array(5).fill(0).map((_v, idx) => (
+        {imagesToShow.map((img: string, idx: number) => (
           <button
             className="border-gray-300 overflow-hidden rounded-md border"
             key={idx + "preview"}
             onClick={() => api?.scrollTo(idx)}
           >
             <Image
-              src="https://g-8fhjeqorrz8.vusercontent.net/placeholder.svg"
-              alt={`Thumbanil ${idx}`}
+              src={img.startsWith("data:") ? img : img}
+              alt={`Thumbnail ${idx}`}
               width={100}
               height={60}
               className="h-[60px] w-[100px] object-cover"

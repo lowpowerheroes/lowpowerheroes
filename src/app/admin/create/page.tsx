@@ -34,6 +34,36 @@ const Create = () => {
     }
   };
 
+  const handleDriverImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      dispatch(updateBuild({ driver_image: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
+    const base64Images = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          }),
+      ),
+    );
+    dispatch(updateBuild({ images: base64Images }));
+  };
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="xs:flex-col w-full items-center justify-between gap-5 p-4 2xl:flex">
@@ -67,13 +97,33 @@ const Create = () => {
         </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-5 2xl:ms-10 2xl:mt-0 2xl:w-1/3 2xl:items-start">
           <h6>Build images:</h6>
-          <CarouselWithThumbs />
+          <Input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+          />
+          <CarouselWithThumbs images={build.images} />
         </div>
       </div>
       <Separator className="my-4 w-full" />
       <div className="flex w-full flex-col items-center justify-between gap-5 p-4">
         <div className="flex w-full items-center justify-between gap-5">
-          <Avatar fallback="CN" src="https://github.com/shadcn.png" />
+          <label className="relative cursor-pointer">
+            <Avatar
+              fallback="CN"
+              src={build.driver_image || undefined}
+              className="transition-opacity hover:opacity-70"
+            />
+            {!build.driver_image && (
+              <input
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 cursor-pointer opacity-0"
+                onChange={handleDriverImageChange}
+              />
+            )}
+          </label>
           <Input
             placeholder="Driver name..."
             className="min-h-[4vh] w-full"
