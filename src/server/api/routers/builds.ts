@@ -14,7 +14,7 @@ export const buildRouter = createTRPCRouter({
         images: z.string().array(),
         mods: z.string().array(),
         driver_nationality: z.string(),
-        driver_descritpion: z.string(),
+        driver_description: z.string(),
         driver_image: z.string(),
       }),
     )
@@ -29,12 +29,12 @@ export const buildRouter = createTRPCRouter({
 
       await ctx.db.insert(builds).values({
         build_name: input.name,
-        driver_description: input.description,
+        build_description: input.description,
         build_tags: input.tags,
         build_images: imgurImageLinks,
         build_mods: input.mods,
         driver_nationality: input.driver_nationality,
-        driver_descritpion: input.driver_descritpion,
+        driver_description: input.driver_description,
         driver_image: input.driver_image,
         createdAt: new Date(),
         updatedAt: new Date(),

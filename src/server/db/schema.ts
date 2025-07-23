@@ -24,6 +24,7 @@ export const builds = createTable(
   {
     build_id: serial("build_id").primaryKey().notNull(),
     build_name: varchar("build_name", { length: 256 }).notNull(),
+    build_description: text("build_description").notNull(),
     build_tags: varchar("build_tags", { length: 256 }).array(),
     build_mods: varchar("build_mods", { length: 256 }).array().notNull(),
     driver_description: text("driver_description").notNull(),

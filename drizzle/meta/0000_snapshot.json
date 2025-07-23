@@ -1,0 +1,116 @@
+{
+  "id": "10de741d-f745-40c5-bb22-efd7c66c4bc8",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.lowpowerheroes_builds": {
+      "name": "lowpowerheroes_builds",
+      "schema": "",
+      "columns": {
+        "build_id": {
+          "name": "build_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "build_name": {
+          "name": "build_name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "build_description": {
+          "name": "build_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "build_tags": {
+          "name": "build_tags",
+          "type": "varchar(256)[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "build_mods": {
+          "name": "build_mods",
+          "type": "varchar(256)[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "driver_description": {
+          "name": "driver_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "build_images": {
+          "name": "build_images",
+          "type": "varchar(256)[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "driver_descritpion": {
+          "name": "driver_descritpion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "driver_nationality": {
+          "name": "driver_nationality",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "driver_image": {
+          "name": "driver_image",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            {
+              "expression": "build_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
