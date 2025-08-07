@@ -2,13 +2,15 @@
 import { Separator } from "@radix-ui/react-separator";
 import { Avatar } from "@radix-ui/themes";
 import { updateBuild } from "~/app/services/createbuild";
-import CarouselWithThumbs from "~/components/customized/carousel/carousel";
+import ImageSwiper from "~/components/customized/SwiperImages/SwiperImages";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { TagsInput } from "~/components/ui/tags-input";
 import { Textarea } from "~/components/ui/textarea";
 import { useAppDispatch, useAppSelector } from "~/hooks/useRedux";
 import { api } from "~/trpc/react";
+import Dropzone from "~/components/customized/Dropzone/Dropzone";
+
 const Create = () => {
   const dispatch = useAppDispatch();
   const build = useAppSelector((state) => state.createbuild);
@@ -47,63 +49,50 @@ const Create = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    const base64Images = await Promise.all(
-      files.map(
-        (file) =>
-          new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          }),
-      ),
-    );
-    dispatch(updateBuild({ images: base64Images }));
-  };
-
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="xs:flex-col w-full items-center justify-between gap-5 p-4 2xl:flex">
-        <div className="flex w-full flex-col gap-5 2xl:w-2/3">
+        <div className="flex w-full flex-col gap-5 2xl:w-2/4">
           <Input
             placeholder="Build name..."
-            className="min-h-[4vh] w-full"
+            className="min-h-[4vh] w-full bg-secondary"
             value={build.name}
             onChange={(e) => dispatch(updateBuild({ name: e.target.value }))}
           />
           <Textarea
             placeholder="Build description..."
-            className="min-h-[25vh] w-full"
+            className="min-h-[25vh] w-full bg-secondary"
             value={build.description}
             onChange={(e) =>
               dispatch(updateBuild({ description: e.target.value }))
             }
           />
+
           <TagsInput
             value={build.tags ?? []}
             onChange={(e) => dispatch(updateBuild({ tags: e }))}
             placeholder="Build tags..."
-            className="w-full"
+            className="w-full bg-secondary"
           />
           <TagsInput
             value={build.mods ?? []}
             onChange={(e) => dispatch(updateBuild({ mods: e }))}
             placeholder="Build mods..."
-            className="w-full"
+            className="w-full bg-secondary"
           />
         </div>
-        <div className="mt-10 flex flex-col items-center justify-center gap-5 2xl:ms-10 2xl:mt-0 2xl:w-1/3 2xl:items-start">
-          <h6>Build images:</h6>
-          <Input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-          />
-          <CarouselWithThumbs images={build.images} />
+        <div className="mt-10 flex flex-col items-center justify-center gap-5 2xl:ms-10 2xl:mt-0 2xl:w-2/4 2xl:items-start">
+          <Dropzone
+            onDropAccepted={(imgs) => dispatch(updateBuild({ images: imgs }))}
+            className={`${build.images?.length ? "w-full p-2" : "h-[42vh] w-full"} flex cursor-pointer items-center justify-center rounded bg-secondary`}
+          >
+            Drop images here or click to open Files.
+          </Dropzone>
+          {build.images?.length !== 0 && (
+            <div className="h-[37vh] w-full">
+              <ImageSwiper images={build.images} isUpload />
+            </div>
+          )}
         </div>
       </div>
       <Separator className="my-4 w-full" />
@@ -126,7 +115,7 @@ const Create = () => {
           </label>
           <Input
             placeholder="Driver name..."
-            className="min-h-[4vh] w-full"
+            className="min-h-[4vh] w-full bg-secondary"
             value={build.driver_name}
             onChange={(e) =>
               dispatch(updateBuild({ driver_name: e.target.value }))
@@ -135,14 +124,20 @@ const Create = () => {
         </div>
         <Textarea
           placeholder="Driver description..."
-          className="min-h-[25vh] w-full"
+          className="min-h-[25vh] w-full bg-secondary"
           value={build.driver_description}
           onChange={(e) =>
             dispatch(updateBuild({ driver_description: e.target.value }))
           }
         />
       </div>
-      <Button onClick={handleUploadBuild}>Upload Build</Button>
+      <Button
+        onClick={handleUploadBuild}
+        variant={"secondary"}
+        className="mt-10"
+      >
+        Upload Build
+      </Button>
     </div>
   );
 };

@@ -27,6 +27,11 @@ export const buildRouter = createTRPCRouter({
         imgurImageLinks.push(imgurUrl);
       }
 
+      let driverImageUrl = input.driver_image;
+      if (input.driver_image.startsWith("data:")) {
+        driverImageUrl = await uploadToImgur(input.driver_image, imgurClientId);
+      }
+
       await ctx.db.insert(builds).values({
         build_name: input.name,
         build_description: input.description,
@@ -35,7 +40,7 @@ export const buildRouter = createTRPCRouter({
         build_mods: input.mods,
         driver_nationality: input.driver_nationality,
         driver_description: input.driver_description,
-        driver_image: input.driver_image,
+        driver_image: driverImageUrl,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

@@ -3,12 +3,11 @@ import { Input } from "~/components/ui/input";
 
 const Search: FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => {
   return (
-    <div className="border-gray-300 bg-gray-50 dark:bg-gray-900 flex w-full max-w-sm items-center space-x-2 rounded-lg border px-3.5 py-2">
+    <div className="border-gray-300 bg-gray-50 dark:bg-gray-900 flex w-full max-w-sm items-center space-x-2 rounded-lg border bg-secondary px-3.5 py-2">
       <SearchIcon className="h-4 w-4" />
       <Input
         type="search"
-        placeholder="Search"
-        className="h-8 w-full border-0 font-semibold"
+        className="h-8 w-full border-0 bg-secondary font-semibold shadow-none"
         {...props}
       />
     </div>
