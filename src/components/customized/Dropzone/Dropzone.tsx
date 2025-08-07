@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 interface DropzoneProps {
   children?: ReactNode;
   className?: string;
-  onDropAccepted: (base64Images: string[]) => void;
+  onDropAccepted: (images: File[]) => void;
 }
 
 const Dropzone: FC<DropzoneProps> = ({
@@ -14,8 +14,7 @@ const Dropzone: FC<DropzoneProps> = ({
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const objectUrls = acceptedFiles.map((file) => URL.createObjectURL(file));
-      onDropAccepted(objectUrls);
+      onDropAccepted(acceptedFiles);
     },
     [onDropAccepted],
   );

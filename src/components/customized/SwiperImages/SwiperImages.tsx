@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./swiper-images.css";
-import { useAppDispatch } from "~/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "~/hooks/useRedux";
 import { updateBuild } from "~/app/services/createbuild";
 
 interface ImageSwiperProps {
@@ -24,7 +24,7 @@ const ImageSwiper: FC<ImageSwiperProps> = ({
   className,
 }) => {
   const dispatch = useAppDispatch();
-
+  const buildImages = useAppSelector((state) => state.createbuild.images);
   useEffect(() => {
     return () => {
       images?.forEach((url) => URL.revokeObjectURL(url));
@@ -62,7 +62,11 @@ const ImageSwiper: FC<ImageSwiperProps> = ({
                   className="absolute bottom-5 right-5 z-10 cursor-pointer rounded bg-secondary p-2 opacity-75"
                   onClick={() =>
                     dispatch(
-                      updateBuild({ images: images.filter((i) => i !== img) }),
+                      updateBuild({
+                        images: buildImages?.filter(
+                          (_i, imgIdx) => imgIdx !== idx,
+                        ),
+                      }),
                     )
                   }
                 >

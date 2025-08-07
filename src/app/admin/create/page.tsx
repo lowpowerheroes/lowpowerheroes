@@ -1,6 +1,5 @@
 "use client";
 import { Separator } from "@radix-ui/react-separator";
-import { Avatar } from "@radix-ui/themes";
 import { updateBuild } from "~/app/services/createbuild";
 import ImageSwiper from "~/components/customized/SwiperImages/SwiperImages";
 import { Button } from "~/components/ui/button";
@@ -10,6 +9,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { useAppDispatch, useAppSelector } from "~/hooks/useRedux";
 import { api } from "~/trpc/react";
 import Dropzone from "~/components/customized/Dropzone/Dropzone";
+import { fileToBase64 } from "~/lib/utils";
 
 const Create = () => {
   const dispatch = useAppDispatch();
@@ -18,12 +18,17 @@ const Create = () => {
   const createBuild = api.build.create.useMutation();
 
   const handleUploadBuild = async () => {
+    let buildImages: string[] = [];
+
+    if (build.images) {
+      buildImages = await Promise.all(build?.images?.map(fileToBase64));
+    }
     try {
       await createBuild.mutateAsync({
         name: build.name,
         description: build.description,
         tags: build.tags ?? [],
-        images: build.images ?? [],
+        images: buildImages,
         mods: build.mods ?? [],
         driver_nationality: build.driver_nationality,
         driver_description: build.driver_description,
@@ -34,19 +39,6 @@ const Create = () => {
       alert("Errore durante l'upload della build");
       console.error(error);
     }
-  };
-
-  const handleDriverImageChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      dispatch(updateBuild({ driver_image: reader.result as string }));
-    };
-    reader.readAsDataURL(file);
   };
 
   return (
@@ -90,7 +82,10 @@ const Create = () => {
           </Dropzone>
           {build.images && build.images?.length !== 0 && (
             <div className="h-[37vh] w-full">
-              <ImageSwiper images={build.images} isUpload />
+              <ImageSwiper
+                images={build.images.map((i) => URL.createObjectURL(i))}
+                isUpload
+              />
             </div>
           )}
         </div>
@@ -98,21 +93,6 @@ const Create = () => {
       <Separator className="my-4 w-full" />
       <div className="flex w-full flex-col items-center justify-between gap-5 p-4">
         <div className="flex w-full items-center justify-between gap-5">
-          <label className="relative cursor-pointer">
-            <Avatar
-              fallback="CN"
-              src={build.driver_image || undefined}
-              className="transition-opacity hover:opacity-70"
-            />
-            {!build.driver_image && (
-              <input
-                type="file"
-                accept="image/*"
-                className="absolute inset-0 cursor-pointer opacity-0"
-                onChange={handleDriverImageChange}
-              />
-            )}
-          </label>
           <Input
             placeholder="Driver name..."
             className="min-h-[4vh] w-full bg-secondary"

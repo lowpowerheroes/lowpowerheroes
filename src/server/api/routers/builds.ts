@@ -2,7 +2,10 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { builds } from "~/server/db/schema";
-import { uploadToImgur } from "~/server/utils/imgur";
+import {
+  createPinterestBoard,
+  createPinterestPin,
+} from "~/server/utils/pinterest";
 
 export const buildRouter = createTRPCRouter({
   create: publicProcedure
@@ -19,28 +22,27 @@ export const buildRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const imgurClientId = process.env.IMGUR_CLIENT_ID!;
+      const boardId = await createPinterestBoard({
+        name: input.name,
+        description: input.description,
+        accessToken: `${process.env.PINTEREST_ACCESS_TOKEN}`,
+      });
 
-      const imgurImageLinks: string[] = [];
-      for (const imageBase64 of input.images) {
-        const imgurUrl = await uploadToImgur(imageBase64, imgurClientId);
-        imgurImageLinks.push(imgurUrl);
-      }
-
-      let driverImageUrl = input.driver_image;
-      if (input.driver_image.startsWith("data:")) {
-        driverImageUrl = await uploadToImgur(input.driver_image, imgurClientId);
-      }
+      const imageUrls = await createPinterestPin({
+        boardId,
+        title: input.name,
+        base64Images: input.images,
+        accessToken: `${process.env.PINTEREST_ACCESS_TOKEN}`,
+      });
 
       await ctx.db.insert(builds).values({
         build_name: input.name,
         build_description: input.description,
         build_tags: input.tags,
-        build_images: imgurImageLinks,
+        build_images: imageUrls,
         build_mods: input.mods,
         driver_nationality: input.driver_nationality,
         driver_description: input.driver_description,
-        driver_image: driverImageUrl,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
