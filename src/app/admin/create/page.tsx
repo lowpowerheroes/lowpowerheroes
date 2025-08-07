@@ -88,7 +88,7 @@ const Create = () => {
           >
             Drop images here or click to open Files.
           </Dropzone>
-          {build.images?.length !== 0 && (
+          {build.images && build.images?.length !== 0 && (
             <div className="h-[37vh] w-full">
               <ImageSwiper images={build.images} isUpload />
             </div>
