@@ -3,7 +3,7 @@ interface CreateBuild {
   description: string;
   tags: string[] | undefined;
   mods: string[] | undefined;
-  images: File[] | undefined;
+  images: string[] | undefined;
   driver_name: string;
   driver_nationality: string;
   driver_description: string;

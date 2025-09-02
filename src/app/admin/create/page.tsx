@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "~/hooks/useRedux";
 import { api } from "~/trpc/react";
 import Dropzone from "~/components/customized/Dropzone/Dropzone";
 import { fileToBase64 } from "~/lib/utils";
+import { useRef } from "react";
 
 const Create = () => {
   const dispatch = useAppDispatch();
@@ -17,11 +18,13 @@ const Create = () => {
 
   const createBuild = api.build.create.useMutation();
 
+  const imageRef = useRef<File[]>([]);
+
   const handleUploadBuild = async () => {
     let buildImages: string[] = [];
 
-    if (build.images) {
-      buildImages = await Promise.all(build?.images?.map(fileToBase64));
+    if (imageRef.current) {
+      buildImages = await Promise.all(imageRef.current.map(fileToBase64));
     }
     try {
       await createBuild.mutateAsync({
@@ -75,17 +78,21 @@ const Create = () => {
         </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-5 2xl:ms-10 2xl:mt-0 2xl:w-2/4 2xl:items-start">
           <Dropzone
-            onDropAccepted={(imgs) => dispatch(updateBuild({ images: imgs }))}
+            onDropAccepted={(images) => {
+              imageRef.current = images;
+              dispatch(
+                updateBuild({
+                  images: images.map((i) => URL.createObjectURL(i)),
+                }),
+              );
+            }}
             className={`${build.images?.length ? "w-full p-2" : "h-[42vh] w-full"} flex cursor-pointer items-center justify-center rounded bg-secondary`}
           >
             Drop images here or click to open Files.
           </Dropzone>
           {build.images && build.images?.length !== 0 && (
             <div className="h-[37vh] w-full">
-              <ImageSwiper
-                images={build.images.map((i) => URL.createObjectURL(i))}
-                isUpload
-              />
+              <ImageSwiper images={build.images} isUpload />
             </div>
           )}
         </div>

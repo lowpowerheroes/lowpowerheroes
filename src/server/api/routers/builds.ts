@@ -2,10 +2,6 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { builds } from "~/server/db/schema";
-import {
-  createPinterestBoard,
-  createPinterestPin,
-} from "~/server/utils/pinterest";
 
 export const buildRouter = createTRPCRouter({
   create: publicProcedure
@@ -22,24 +18,11 @@ export const buildRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const boardId = await createPinterestBoard({
-        name: input.name,
-        description: input.description,
-        accessToken: `${process.env.PINTEREST_ACCESS_TOKEN}`,
-      });
-
-      const imageUrls = await createPinterestPin({
-        boardId,
-        title: input.name,
-        base64Images: input.images,
-        accessToken: `${process.env.PINTEREST_ACCESS_TOKEN}`,
-      });
-
       await ctx.db.insert(builds).values({
         build_name: input.name,
         build_description: input.description,
         build_tags: input.tags,
-        build_images: imageUrls,
+        build_images: [],
         build_mods: input.mods,
         driver_nationality: input.driver_nationality,
         driver_description: input.driver_description,
