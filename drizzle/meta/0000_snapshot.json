@@ -1,5 +1,5 @@
 {
-  "id": "10de741d-f745-40c5-bb22-efd7c66c4bc8",
+  "id": "d8ce0117-7901-46aa-8cd3-17c83a9b022b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,9 +10,10 @@
       "columns": {
         "build_id": {
           "name": "build_id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "build_name": {
           "name": "build_name",
@@ -26,12 +27,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "build_tags": {
-          "name": "build_tags",
-          "type": "varchar(256)[]",
-          "primaryKey": false,
-          "notNull": false
-        },
         "build_mods": {
           "name": "build_mods",
           "type": "varchar(256)[]",
@@ -44,29 +39,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "build_images": {
-          "name": "build_images",
-          "type": "varchar(256)[]",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "driver_descritpion": {
-          "name": "driver_descritpion",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "driver_nationality": {
           "name": "driver_nationality",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
-        },
-        "driver_image": {
-          "name": "driver_image",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -101,6 +78,62 @@
         }
       },
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.lowpowerheroes_build_images": {
+      "name": "lowpowerheroes_build_images",
+      "schema": "",
+      "columns": {
+        "image_id": {
+          "name": "image_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "build_id": {
+          "name": "build_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_primary": {
+          "name": "is_primary",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "order_index": {
+          "name": "order_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lowpowerheroes_build_images_build_id_lowpowerheroes_builds_build_id_fk": {
+          "name": "lowpowerheroes_build_images_build_id_lowpowerheroes_builds_build_id_fk",
+          "tableFrom": "lowpowerheroes_build_images",
+          "tableTo": "lowpowerheroes_builds",
+          "columnsFrom": [
+            "build_id"
+          ],
+          "columnsTo": [
+            "build_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }

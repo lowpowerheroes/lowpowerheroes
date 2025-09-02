@@ -1,7 +1,6 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { builds } from "~/server/db/schema";
+import { createBuildWithImages } from "~/server/services/build";
 
 export const buildRouter = createTRPCRouter({
   create: publicProcedure
@@ -9,26 +8,28 @@ export const buildRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         description: z.string(),
-        tags: z.string().array(),
-        images: z.string().array(),
-        mods: z.string().array(),
+        mods: z.array(z.string()),
         driver_nationality: z.string(),
         driver_description: z.string(),
-        driver_image: z.string(),
+        images: z.array(
+          z.object({
+            url: z.string().url(),
+            isPrimary: z.boolean().optional(),
+          }),
+        ),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db.insert(builds).values({
+    .mutation(async ({ input }) => {
+      const build = await createBuildWithImages({
         build_name: input.name,
         build_description: input.description,
-        build_tags: input.tags,
-        build_images: [],
         build_mods: input.mods,
         driver_nationality: input.driver_nationality,
         driver_description: input.driver_description,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        images: input.images,
       });
+
+      return build;
     }),
 
   getLatest: publicProcedure.query(async ({ ctx }) => {
