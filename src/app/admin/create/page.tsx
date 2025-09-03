@@ -1,6 +1,6 @@
 "use client";
 import { Separator } from "@radix-ui/react-separator";
-import { updateBuild } from "~/app/services/createbuild";
+import { resetBuild, updateBuild } from "~/app/services/createbuild";
 import ImageSwiper from "~/components/customized/SwiperImages/SwiperImages";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "~/hooks/useRedux";
 import { api } from "~/trpc/react";
 import Dropzone from "~/components/customized/Dropzone/Dropzone";
 import { fileToBase64 } from "~/lib/utils";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const Create = () => {
   const dispatch = useAppDispatch();
@@ -48,6 +48,12 @@ const Create = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetBuild());
+    };
+  }, [dispatch]);
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
