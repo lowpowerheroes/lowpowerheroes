@@ -16,7 +16,11 @@ const Create = () => {
   const dispatch = useAppDispatch();
   const build = useAppSelector((state) => state.createbuild);
 
-  const createBuild = api.build.create.useMutation();
+  const createBuild = api.build.create.useMutation({
+    onError: (error) => {
+      alert(error.message);
+    },
+  });
 
   const imageRef = useRef<File[]>([]);
 
@@ -30,12 +34,13 @@ const Create = () => {
       await createBuild.mutateAsync({
         name: build.name,
         description: build.description,
-        tags: build.tags ?? [],
-        images: buildImages,
+        images: buildImages.map((img, idx) => ({
+          base64: img,
+          isPrimary: idx === 0,
+        })),
         mods: build.mods ?? [],
         driver_nationality: build.driver_nationality,
         driver_description: build.driver_description,
-        driver_image: build.driver_image,
       });
       alert("Build caricata con successo!");
     } catch (error) {
@@ -46,7 +51,7 @@ const Create = () => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="xs:flex-col w-full items-center justify-between gap-5 p-4 2xl:flex">
+      <div className="xs:flex-col w-full items-start justify-between gap-5 p-4 2xl:flex">
         <div className="flex w-full flex-col gap-5 2xl:w-2/4">
           <Input
             placeholder="Build name..."
@@ -63,12 +68,6 @@ const Create = () => {
             }
           />
 
-          <TagsInput
-            value={build.tags ?? []}
-            onChange={(e) => dispatch(updateBuild({ tags: e }))}
-            placeholder="Build tags..."
-            className="w-full bg-secondary"
-          />
           <TagsInput
             value={build.mods ?? []}
             onChange={(e) => dispatch(updateBuild({ mods: e }))}

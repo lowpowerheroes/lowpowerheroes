@@ -1,9 +1,13 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+} from "~/server/api/trpc";
 import { createBuildWithImages } from "~/server/services/build";
 
 export const buildRouter = createTRPCRouter({
-  create: publicProcedure
+  create: protectedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -11,16 +15,18 @@ export const buildRouter = createTRPCRouter({
         mods: z.array(z.string()),
         driver_nationality: z.string(),
         driver_description: z.string(),
-        images: z.array(
-          z.object({
-            url: z.string().url(),
-            isPrimary: z.boolean().optional(),
-          }),
-        ),
+        images: z
+          .array(
+            z.object({
+              base64: z.string(),
+              isPrimary: z.boolean().optional(),
+            }),
+          )
+          .max(10, "Maximum 10 images allowed"),
       }),
     )
     .mutation(async ({ input }) => {
-      const build = await createBuildWithImages({
+      await createBuildWithImages({
         build_name: input.name,
         build_description: input.description,
         build_mods: input.mods,
@@ -29,7 +35,7 @@ export const buildRouter = createTRPCRouter({
         images: input.images,
       });
 
-      return build;
+      return { success: true };
     }),
 
   getLatest: publicProcedure.query(async ({ ctx }) => {

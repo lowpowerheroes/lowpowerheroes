@@ -1,7 +1,6 @@
 interface CreateBuild {
   name: string;
   description: string;
-  tags: string[] | undefined;
   mods: string[] | undefined;
   images: string[] | undefined;
   driver_name: string;
@@ -17,7 +16,6 @@ export type CreateBuildArgs = {
 export const createbuildInitialState: CreateBuild = {
   name: "",
   description: "",
-  tags: undefined,
   mods: undefined,
   images: undefined,
   driver_name: "",
