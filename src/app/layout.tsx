@@ -1,9 +1,12 @@
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
-import { Theme } from "@radix-ui/themes";
 import { type Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "next-themes";
+import { Theme } from "@radix-ui/themes";
 import { TRPCReactProvider } from "~/trpc/react";
+import { ClerkProvider } from "@clerk/nextjs";
+import Header from "~/components/ui/header";
+import ReduxProvider from "~/providers/Redux";
 
 export const metadata: Metadata = {
   title: {
@@ -18,14 +21,27 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className="dark:bg-slate-800">
-        <ClerkProvider>
-          <TRPCReactProvider>
-            <Theme>{children}</Theme>
-          </TRPCReactProvider>
-        </ClerkProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <ReduxProvider>
+        <html lang="en" suppressHydrationWarning>
+          <body className="antialiased">
+            <TRPCReactProvider>
+              <Theme>
+                <ThemeProvider
+                  attribute={"class"}
+                  enableSystem
+                  defaultTheme="system"
+                >
+                  <Header />
+                  <div className="flex w-full flex-row flex-wrap justify-between px-4 py-5 sm:px-8 md:justify-between md:px-16 lg:px-32 xl:px-60">
+                    {children}
+                  </div>
+                </ThemeProvider>
+              </Theme>
+            </TRPCReactProvider>
+          </body>
+        </html>
+      </ReduxProvider>
+    </ClerkProvider>
   );
 }
