@@ -10,11 +10,12 @@ import { useAppDispatch, useAppSelector } from "~/hooks/useRedux";
 import { api } from "~/trpc/react";
 import Dropzone from "~/components/customized/Dropzone/Dropzone";
 import { fileToBase64 } from "~/lib/utils";
-import { useEffect, useRef } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import { Spinner } from "@radix-ui/themes";
 const Create = () => {
   const dispatch = useAppDispatch();
   const build = useAppSelector((state) => state.createbuild);
+  const [buildLoading, setBuildLoading] = useState(false);
 
   const createBuild = api.build.create.useMutation({
     onError: (error) => {
@@ -31,6 +32,7 @@ const Create = () => {
       buildImages = await Promise.all(imageRef.current.map(fileToBase64));
     }
     try {
+      setBuildLoading(true);
       await createBuild.mutateAsync({
         name: build.name,
         description: build.description,
@@ -43,9 +45,12 @@ const Create = () => {
         driver_description: build.driver_description,
       });
       alert("Build caricata con successo!");
+      setBuildLoading(false);
+      dispatch(resetBuild());
     } catch (error) {
       alert("Errore durante l'upload della build");
       console.error(error);
+      setBuildLoading(false);
     }
   };
 
@@ -128,7 +133,7 @@ const Create = () => {
         variant={"secondary"}
         className="mt-10"
       >
-        Upload Build
+        {buildLoading ? <Spinner /> : "Upload Build"}
       </Button>
     </div>
   );
