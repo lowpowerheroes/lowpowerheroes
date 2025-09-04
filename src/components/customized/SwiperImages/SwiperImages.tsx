@@ -24,7 +24,8 @@ const ImageSwiper: FC<ImageSwiperProps> = ({
   className,
 }) => {
   const dispatch = useAppDispatch();
-  const buildImages = useAppSelector((state) => state.createbuild.images);
+  const buildImages = useAppSelector((state) => state.createbuild.build_images);
+
   useEffect(() => {
     return () => {
       images?.forEach((url) => URL.revokeObjectURL(url));
@@ -63,7 +64,7 @@ const ImageSwiper: FC<ImageSwiperProps> = ({
                   onClick={() =>
                     dispatch(
                       updateBuild({
-                        images: buildImages?.filter(
+                        build_images: buildImages?.filter(
                           (_i, imgIdx) => imgIdx !== idx,
                         ),
                       }),

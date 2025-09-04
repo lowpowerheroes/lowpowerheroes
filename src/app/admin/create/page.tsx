@@ -34,13 +34,15 @@ const Create = () => {
     try {
       setBuildLoading(true);
       await createBuild.mutateAsync({
-        name: build.name,
-        description: build.description,
-        images: buildImages.map((img, idx) => ({
+        build_name: build.build_name,
+        build_description: build.build_description,
+        build_images: buildImages.map((img, idx) => ({
           base64: img,
           isPrimary: idx === 0,
         })),
-        mods: build.mods ?? [],
+        build_mods: build.build_mods ?? [],
+        driver_name: build.driver_name,
+        driver_nationality: build.driver_nationality,
         driver_description: build.driver_description,
       });
       alert("Build caricata con successo!");
@@ -66,21 +68,23 @@ const Create = () => {
           <Input
             placeholder="Build name..."
             className="min-h-[4vh] w-full bg-secondary"
-            value={build.name}
-            onChange={(e) => dispatch(updateBuild({ name: e.target.value }))}
+            value={build.build_name}
+            onChange={(e) =>
+              dispatch(updateBuild({ build_name: e.target.value }))
+            }
           />
           <Textarea
             placeholder="Build description..."
             className="min-h-[25vh] w-full bg-secondary"
-            value={build.description}
+            value={build.build_description}
             onChange={(e) =>
-              dispatch(updateBuild({ description: e.target.value }))
+              dispatch(updateBuild({ build_description: e.target.value }))
             }
           />
 
           <TagsInput
-            value={build.mods ?? []}
-            onChange={(e) => dispatch(updateBuild({ mods: e }))}
+            value={build.build_mods ?? []}
+            onChange={(e) => dispatch(updateBuild({ build_mods: e }))}
             placeholder="Build mods..."
             className="w-full bg-secondary"
           />
@@ -91,17 +95,17 @@ const Create = () => {
               imageRef.current = images;
               dispatch(
                 updateBuild({
-                  images: images.map((i) => URL.createObjectURL(i)),
+                  build_images: images.map((i) => URL.createObjectURL(i)),
                 }),
               );
             }}
-            className={`${build.images?.length ? "w-full p-2" : "h-[42vh] w-full"} flex cursor-pointer items-center justify-center rounded bg-secondary`}
+            className={`${build.build_images?.length ? "w-full p-2" : "h-[42vh] w-full"} flex cursor-pointer items-center justify-center rounded bg-secondary`}
           >
             Drop images here or click to open Files.
           </Dropzone>
-          {build.images && build.images?.length !== 0 && (
+          {build.build_images && build.build_images?.length !== 0 && (
             <div className="h-[37vh] w-full">
-              <ImageSwiper images={build.images} isUpload />
+              <ImageSwiper images={build.build_images} isUpload />
             </div>
           )}
         </div>
@@ -111,10 +115,18 @@ const Create = () => {
         <div className="flex w-full items-center justify-between gap-5">
           <Input
             placeholder="Driver name..."
-            className="min-h-[4vh] w-full bg-secondary"
+            className="min-h-[4vh] w-2/3 bg-secondary"
             value={build.driver_name}
             onChange={(e) =>
               dispatch(updateBuild({ driver_name: e.target.value }))
+            }
+          />
+          <Input
+            placeholder="Driver nationality..."
+            className="min-h-[4vh] w-1/3 bg-secondary"
+            value={build.driver_nationality}
+            onChange={(e) =>
+              dispatch(updateBuild({ driver_nationality: e.target.value }))
             }
           />
         </div>

@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "lowpowerheroes_builds" (
 	"build_description" text NOT NULL,
 	"build_mods" varchar(256)[] NOT NULL,
 	"driver_description" text NOT NULL,
-	"driver_nationality" varchar(256) NOT NULL,
+	"driver_name" varchar(128) NOT NULL,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );

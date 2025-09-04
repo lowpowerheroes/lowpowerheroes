@@ -1,0 +1,1 @@
+ALTER TABLE "lowpowerheroes_builds" ADD COLUMN "driver_nationality" varchar(128) NOT NULL;

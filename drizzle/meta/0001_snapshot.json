@@ -1,6 +1,6 @@
 {
-  "id": "7695f3d0-eac5-4478-8920-3484cf326c6d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "70c4a2e6-fe0b-44b4-a255-5179b5fd2d7b",
+  "prevId": "7695f3d0-eac5-4478-8920-3484cf326c6d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -41,6 +41,12 @@
         },
         "driver_name": {
           "name": "driver_name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "driver_nationality": {
+          "name": "driver_nationality",
           "type": "varchar(128)",
           "primaryKey": false,
           "notNull": true

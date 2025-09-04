@@ -11,7 +11,9 @@ type CreateBuildInput = {
   build_description: string;
   build_mods: string[];
   driver_description: string;
-  images: { base64: string; isPrimary?: boolean }[];
+  driver_name: string;
+  build_images: { base64: string; isPrimary?: boolean }[];
+  driver_nationality: string;
 };
 
 export async function createBuildWithImages(input: CreateBuildInput) {
@@ -26,6 +28,8 @@ export async function createBuildWithImages(input: CreateBuildInput) {
           build_description: input.build_description,
           build_mods: input.build_mods,
           driver_description: input.driver_description,
+          driver_name: input.driver_name,
+          driver_nationality: input.driver_nationality,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
@@ -38,7 +42,7 @@ export async function createBuildWithImages(input: CreateBuildInput) {
         });
       }
 
-      for (const [i, img] of input.images.entries()) {
+      for (const [i, img] of input.build_images.entries()) {
         const buffer = Buffer.from(
           img.base64.replace(/^data:image\/\w+;base64,/, ""),
           "base64",

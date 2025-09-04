@@ -18,10 +18,9 @@ export const buildImages = createTable("build_images", {
 
   image_url: varchar("image_url", { length: 512 }).notNull(),
   is_primary: boolean("is_primary").default(false).notNull(),
-  order_index: integer("order_index"), // opzionale: per gestire ordinamento manuale
+  order_index: integer("order_index"),
 });
 
-// Relations
 export const buildImagesRelations = relations(buildImages, ({ one }) => ({
   build: one(builds, {
     fields: [buildImages.build_id],
