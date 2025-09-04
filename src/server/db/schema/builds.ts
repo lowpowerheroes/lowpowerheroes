@@ -18,9 +18,6 @@ export const builds = createTable(
     build_description: text("build_description").notNull(),
     build_mods: varchar("build_mods", { length: 256 }).array().notNull(),
     driver_description: text("driver_description").notNull(),
-    driver_nationality: varchar("driver_nationality", {
-      length: 256,
-    }).notNull(),
 
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)

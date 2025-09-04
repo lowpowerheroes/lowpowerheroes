@@ -13,7 +13,6 @@ export const buildRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         mods: z.array(z.string()),
-        driver_nationality: z.string(),
         driver_description: z.string(),
         images: z
           .array(
@@ -30,7 +29,6 @@ export const buildRouter = createTRPCRouter({
         build_name: input.name,
         build_description: input.description,
         build_mods: input.mods,
-        driver_nationality: input.driver_nationality,
         driver_description: input.driver_description,
         images: input.images,
       });

@@ -1,7 +1,9 @@
 import { api, HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
-  await api.build.getLatest.prefetch();
+  const build = await api.build.getLatest.call({});
+
+  console.log(build);
 
   return (
     <HydrateClient>

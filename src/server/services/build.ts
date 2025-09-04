@@ -10,7 +10,6 @@ type CreateBuildInput = {
   build_name: string;
   build_description: string;
   build_mods: string[];
-  driver_nationality: string;
   driver_description: string;
   images: { base64: string; isPrimary?: boolean }[];
 };
@@ -26,7 +25,6 @@ export async function createBuildWithImages(input: CreateBuildInput) {
           build_name: input.build_name,
           build_description: input.build_description,
           build_mods: input.build_mods,
-          driver_nationality: input.driver_nationality,
           driver_description: input.driver_description,
           createdAt: new Date(),
           updatedAt: new Date(),

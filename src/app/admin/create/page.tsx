@@ -41,7 +41,6 @@ const Create = () => {
           isPrimary: idx === 0,
         })),
         mods: build.mods ?? [],
-        driver_nationality: build.driver_nationality,
         driver_description: build.driver_description,
       });
       alert("Build caricata con successo!");
