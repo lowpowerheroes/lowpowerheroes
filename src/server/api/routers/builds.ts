@@ -1,5 +1,6 @@
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { count, ilike } from "drizzle-orm";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -8,6 +9,7 @@ import {
 } from "~/server/api/trpc";
 import { createBuildWithImages } from "~/server/services/build";
 import { s3 } from "~/server/services/r2";
+import { builds } from "~/server/db/schema/builds";
 
 export const buildRouter = createTRPCRouter({
   create: protectedProcedure
@@ -66,4 +68,52 @@ export const buildRouter = createTRPCRouter({
 
     return builds ?? null;
   }),
+
+  searchByName: publicProcedure
+    .input(
+      z.object({
+        query: z.string(),
+        page: z.number().min(1).default(1),
+        limit: z.number().min(1).max(50).default(24),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { query, page, limit } = input;
+
+      if (!query.trim()) {
+        return { builds: [], totalCount: 0 };
+      }
+
+      const whereCondition = ilike(builds.build_name, `%${query}%`);
+      const offset = (page - 1) * limit;
+
+      const [results, total] = await Promise.all([
+        ctx.db.query.builds.findMany({
+          where: whereCondition,
+          orderBy: (builds, { desc }) => [desc(builds.createdAt)],
+          with: {
+            images: true,
+          },
+          limit,
+          offset,
+        }),
+        ctx.db.select({ value: count() }).from(builds).where(whereCondition),
+      ]);
+
+      const totalCount = total[0]?.value ?? 0;
+
+      for (const build of results) {
+        for (const image of build.images) {
+          const command = new GetObjectCommand({
+            Bucket: process.env.R2_BUCKET_NAME,
+            Key: image.image_url.split("/").pop(),
+          });
+          image.image_url = await getSignedUrl(s3, command, {
+            expiresIn: 3600,
+          });
+        }
+      }
+
+      return { builds: results, totalCount };
+    }),
 });

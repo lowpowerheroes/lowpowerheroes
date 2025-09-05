@@ -13,7 +13,6 @@ import { SignOutButton, useUser, UserButton } from "@clerk/nextjs";
 const Header = () => {
   const { isLoaded, isSignedIn } = useUser();
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
-  const [search, setSearch] = useState<string>("");
 
   return (
     <div className="bg-white dark:bg-black flex w-full flex-col items-center">
@@ -41,11 +40,7 @@ const Header = () => {
               {`${isLoaded && isSignedIn ? "Create a new build" : "Upload your build!"} `}
             </Link>
           </Button>
-          <Search
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search builds..."
-          />
+          <Search placeholder="Search builds..." />
           <ThemeToggle />
           {isLoaded && isSignedIn && (
             <div className="hidden md:flex">
@@ -92,11 +87,7 @@ const Header = () => {
               </Link>
             </Button>
             <div className="flex w-full flex-row items-center justify-between space-x-2">
-              <Search
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search builds..."
-              />
+              <Search placeholder="Search builds..." />
               <ThemeToggle />
             </div>
             <SignOutButton>

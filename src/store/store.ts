@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createbuild from "~/app/services/createbuild";
+import builds from "~/app/services/builds";
 
 export const store = configureStore({
   reducer: {
     createbuild,
+    builds,
   },
 });
 

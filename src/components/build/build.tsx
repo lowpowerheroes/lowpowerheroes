@@ -5,12 +5,13 @@ import type { Build as BuildProperties } from "~/app/types/createbuild";
 import ImageSwiper from "../customized/SwiperImages/SwiperImages";
 
 const Build: FC<BuildProperties> = (props) => {
+  const { images } = props;
   return (
     <div className="my-8 w-full overflow-hidden rounded-xl bg-secondary text-primary-foreground shadow-2xl">
       <div className="flex flex-col md:flex-row">
         <div className="bg-black h-[25vh] w-full md:h-[85vh] md:w-1/2">
-          {props.build_images && props.build_images.length > 0 ? (
-            <ImageSwiper images={props.build_images} />
+          {images && images?.length > 0 ? (
+            <ImageSwiper images={images.map((i) => i.image_url)} />
           ) : (
             <div className="bg-gray-800 flex h-full w-full items-center justify-center">
               <p className="text-muted-foreground">No images available</p>
