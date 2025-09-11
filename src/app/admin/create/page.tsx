@@ -12,6 +12,7 @@ import Dropzone from "~/components/customized/Dropzone/Dropzone";
 import { fileToBase64 } from "~/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "@radix-ui/themes";
+
 const Create = () => {
   const dispatch = useAppDispatch();
   const build = useAppSelector((state) => state.createbuild);
@@ -95,17 +96,28 @@ const Create = () => {
               imageRef.current = images;
               dispatch(
                 updateBuild({
-                  build_images: images.map((i) => URL.createObjectURL(i)),
+                  images: images.map((i, idx) => {
+                    return {
+                      build_id: "temp-id",
+                      image_id: "temp-id",
+                      image_url: URL.createObjectURL(i),
+                      is_primary: idx === 0,
+                      order_index: idx,
+                    };
+                  }),
                 }),
               );
             }}
-            className={`${build.build_images?.length ? "w-full p-2" : "h-[42vh] w-full"} flex cursor-pointer items-center justify-center rounded bg-secondary`}
+            className={`${build.images?.length ? "w-full p-2" : "h-[42vh] w-full"} flex cursor-pointer items-center justify-center rounded bg-secondary`}
           >
             Drop images here or click to open Files.
           </Dropzone>
-          {build.build_images && build.build_images?.length !== 0 && (
+          {build.images && build.images?.length !== 0 && (
             <div className="h-[37vh] w-full">
-              <ImageSwiper images={build.build_images} isUpload />
+              <ImageSwiper
+                images={build.images.map((i) => i.image_url)}
+                isUpload
+              />
             </div>
           )}
         </div>
