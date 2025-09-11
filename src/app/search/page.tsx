@@ -1,12 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import BuildCard from "~/components/build/BuildCard";
 import { Button } from "~/components/ui/button";
 import { keepPreviousData } from "@tanstack/react-query";
 
-export default function SearchPage() {
+function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
@@ -80,5 +81,13 @@ export default function SearchPage() {
         <p>No builds found for your search.</p>
       )}
     </main>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<p>Loading search...</p>}>
+      <SearchContent />
+    </Suspense>
   );
 }
