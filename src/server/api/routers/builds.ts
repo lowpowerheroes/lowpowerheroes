@@ -1,6 +1,6 @@
-import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { count, eq, ilike } from "drizzle-orm";
+import { count, eq, ilike, lt } from "drizzle-orm";
 import type { BuildWithImages } from "~/lib/types";
 import { z } from "zod";
 import {
@@ -10,7 +10,8 @@ import {
 } from "~/server/api/trpc";
 import { builds } from "~/server/db/schema/builds";
 import { createBuildWithImages } from "~/server/services/build";
-import { s3 } from "~/server/services/r2";
+import { BUCKET_NAME, s3 } from "~/server/services/r2";
+import { TRPCError } from "@trpc/server";
 
 async function generateSignedUrlsForBuild(build: BuildWithImages) {
   for (const image of build.images) {
@@ -61,20 +62,42 @@ export const buildRouter = createTRPCRouter({
       return { success: true };
     }),
 
-  getLatest: publicProcedure.query(async ({ ctx }) => {
-    const builds = await ctx.db.query.builds.findMany({
-      orderBy: (builds, { desc }) => [desc(builds.createdAt)],
-      with: {
-        images: true,
-      },
-    });
+  getInfinite: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(50).nullish(),
+        cursor: z.date().nullish(), // Il cursore sarà la data di creazione dell'ultima build caricata
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 24;
+      const { cursor } = input;
 
-    for (const build of builds) {
-      await generateSignedUrlsForBuild(build);
-    }
+      const items = await ctx.db.query.builds.findMany({
+        orderBy: (builds, { desc }) => [desc(builds.createdAt)],
+        where: cursor ? lt(builds.createdAt, cursor) : undefined,
+        limit: limit + 1, // Chiediamo un elemento in più per sapere se c'è una pagina successiva
+        with: {
+          images: true,
+        },
+      });
 
-    return builds ?? null;
-  }),
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (items.length > limit) {
+        // Se abbiamo un elemento in più, lo usiamo per definire il prossimo cursore e lo rimuoviamo dalla lista
+        const nextItem = items.pop();
+        nextCursor = nextItem!.createdAt;
+      }
+
+      await Promise.all(
+        items.map((build) => generateSignedUrlsForBuild(build)),
+      );
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
 
   searchByName: publicProcedure
     .input(
@@ -133,5 +156,36 @@ export const buildRouter = createTRPCRouter({
       await generateSignedUrlsForBuild(build);
 
       return build;
+    }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const build = await ctx.db.query.builds.findFirst({
+        where: eq(builds.build_id, input.id),
+        with: {
+          images: true,
+        },
+      });
+
+      if (!build) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Build not found." });
+      }
+
+      if (build.images && build.images.length > 0) {
+        const deletePromises = build.images.map((image) => {
+          const key = image.image_url.split("/").pop();
+          if (!key) return Promise.resolve();
+          return s3.send(
+            new DeleteObjectCommand({
+              Bucket: BUCKET_NAME,
+              Key: key,
+            }),
+          );
+        });
+        await Promise.all(deletePromises);
+      }
+
+      return ctx.db.delete(builds).where(eq(builds.build_id, input.id));
     }),
 });

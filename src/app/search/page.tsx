@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
-import BuildCard from "~/components/build/BuildCard";
+import BuildCard from "~/components/Build/BuildCard";
 import { Button } from "~/components/ui/button";
 import { keepPreviousData } from "@tanstack/react-query";
 

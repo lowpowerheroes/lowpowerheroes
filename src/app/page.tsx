@@ -1,4 +1,4 @@
-import Build from "~/components/build/build";
+import Build from "~/components/Build/build";
 import { HydrateClient, api } from "~/trpc/server";
 
 export default async function Home() {
@@ -6,7 +6,7 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main className="bg-white dark:bg-black text-black dark:text-white flex w-full transition-all duration-300">
+      <main className="bg-white dark:bg-black text-black dark:text-white flex w-full flex-wrap transition-all duration-300">
         {build.map((b) => (
           <Build key={b.build_id} {...b} />
         ))}
