@@ -1,16 +1,15 @@
-import Build from "~/components/Build/build";
-import { HydrateClient, api } from "~/trpc/server";
+import { BuildList } from "~/components/Build/BuildList";
+import { api } from "~/trpc/server";
 
 export default async function Home() {
-  const build = await api.build.getLatest.call({});
+  const initialBuilds = await api.build.getInfinite.call(
+    {},
+    { limit: 24, cursor: undefined },
+  );
 
   return (
-    <HydrateClient>
-      <main className="bg-white dark:bg-black text-black dark:text-white flex w-full flex-wrap transition-all duration-300">
-        {build.map((b) => (
-          <Build key={b.build_id} {...b} />
-        ))}
-      </main>
-    </HydrateClient>
+    <main className="bg-white dark:bg-black text-black dark:text-white flex w-full flex-col items-center p-4 transition-all duration-300">
+      <BuildList initialBuilds={initialBuilds} />
+    </main>
   );
 }

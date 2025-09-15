@@ -10,10 +10,12 @@ type DeleteBuildButtonProps = {
 
 const DeleteBuildButton = ({ buildId }: DeleteBuildButtonProps) => {
   const router = useRouter();
+  const utils = api.useUtils();
   const deleteBuildMutation = api.build.delete.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      // Invalida specificamente la cache della query getInfinite
+      await utils.build.getInfinite.invalidate();
       router.push("/");
-      router.refresh();
     },
     onError: (error) => {
       console.error("Failed to delete build:", error);
