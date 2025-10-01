@@ -32,6 +32,7 @@ const DeleteBuildButton = ({ buildId }: DeleteBuildButtonProps) => {
   return (
     <Button
       color="red"
+      className="cursor-pointer"
       onClick={handleDelete}
       loading={deleteBuildMutation.isPending}
     >
