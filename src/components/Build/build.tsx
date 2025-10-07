@@ -9,8 +9,8 @@ const Build: FC<BuildProperties> = (props) => {
   const { images } = props;
   return (
     <div className="my-8 w-full overflow-hidden rounded-xl bg-secondary text-primary-foreground shadow-2xl">
-      <div className="flex flex-col md:flex-row">
-        <div className="bg-black h-[25vh] w-full md:h-[85vh] md:w-1/2">
+      <div className="flex flex-col lg:flex-row">
+        <div className="bg-black h-[25vh] w-full lg:h-[85vh] lg:w-1/2">
           {images && images?.length > 0 ? (
             <ImageSwiper images={images.map((i) => i.image_url)} />
           ) : (
@@ -20,7 +20,7 @@ const Build: FC<BuildProperties> = (props) => {
           )}
         </div>
 
-        <div className="flex w-full flex-col gap-6 p-6 md:w-1/2 md:p-8">
+        <div className="flex w-full flex-col gap-6 p-6 lg:w-1/2 lg:p-8">
           <div className="border-b border-border pb-4">
             <h1 className="mb-2 flex justify-between text-4xl font-extrabold tracking-tight text-primary">
               <span>{props.build_name}</span>

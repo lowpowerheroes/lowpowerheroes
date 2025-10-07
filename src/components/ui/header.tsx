@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <div className="sticky top-0 z-50 flex w-full flex-col items-center bg-background bg-opacity-100">
-      <header className="flex w-full flex-row flex-wrap justify-between px-4 py-5 sm:px-8 md:justify-between md:px-16 lg:px-32 xl:px-60">
+      <header className="flex w-full flex-row flex-wrap justify-between px-4 py-5 sm:px-8 lg:justify-between lg:px-32 xl:px-60">
         <div className="h-10">
           <Button variant={"link"} asChild>
             <Link
@@ -27,7 +27,7 @@ const Header = () => {
             </Link>
           </Button>
         </div>
-        <div className="hidden h-10 items-center justify-center space-x-2 md:flex">
+        <div className="hidden h-10 items-center justify-center space-x-2 lg:flex">
           <Button variant={"outline"} asChild className="h-12">
             <Link
               href={`${
@@ -43,7 +43,7 @@ const Header = () => {
           <Search placeholder="Search builds..." />
           <ThemeToggle />
           {isLoaded && isSignedIn && (
-            <div className="hidden md:flex">
+            <div className="hidden lg:flex">
               <UserButton
                 appearance={{
                   elements: {
@@ -55,7 +55,7 @@ const Header = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center md:hidden">
+        <div className="flex items-center lg:hidden">
           <Button
             variant={"outline"}
             onClick={() => setHamburgerOpen(!hamburgerOpen)}
@@ -73,7 +73,7 @@ const Header = () => {
           </Button>
         </div>
         {hamburgerOpen && (
-          <div className="mt-5 flex w-full flex-wrap items-center px-4 md:hidden">
+          <div className="mt-5 flex w-full flex-wrap items-center px-4 lg:hidden">
             <Button variant={"outline"} asChild className="mb-5 w-full">
               <Link
                 href={`${
