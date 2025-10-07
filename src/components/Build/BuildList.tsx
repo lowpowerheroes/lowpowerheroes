@@ -54,7 +54,7 @@ export function BuildList({ initialBuilds }: BuildListProps) {
     <>
       <div className="flex w-full flex-wrap justify-center gap-4">
         {allBuilds.map((b) => (
-          <div key={b.build_id} className="w-full lg:w-auto">
+          <div key={b.build_id} className="w-full">
             <div className="hidden lg:block">
               <Build key={b.build_id} {...b} />
             </div>
