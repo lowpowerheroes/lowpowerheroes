@@ -3,6 +3,7 @@
 import React, { type FC } from "react";
 import type { Build as BuildProperties } from "~/app/types/createbuild";
 import ImageSwiper from "../customized/SwiperImages/SwiperImages";
+import BuildActions from "./BuildActions/BuildActions";
 
 const Build: FC<BuildProperties> = (props) => {
   const { images } = props;
@@ -21,8 +22,9 @@ const Build: FC<BuildProperties> = (props) => {
 
         <div className="flex w-full flex-col gap-6 p-6 md:w-1/2 md:p-8">
           <div className="border-b border-border pb-4">
-            <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-primary">
-              {props.build_name}
+            <h1 className="mb-2 flex justify-between text-4xl font-extrabold tracking-tight text-primary">
+              <span>{props.build_name}</span>
+              <BuildActions buildId={`${props.build_id}`} />
             </h1>
             <p className="text-base text-muted-foreground">
               {props.build_description}

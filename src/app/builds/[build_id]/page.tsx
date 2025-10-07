@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import Build from "~/components/build/build";
+import Build from "~/components/Build/build";
 import { use } from "react";
 import { Button } from "~/components/ui/button";
 import { Spinner } from "@radix-ui/themes";

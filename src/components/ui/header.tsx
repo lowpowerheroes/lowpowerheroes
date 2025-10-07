@@ -15,7 +15,7 @@ const Header = () => {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
 
   return (
-    <div className="bg-white dark:bg-black flex w-full flex-col items-center">
+    <div className="sticky top-0 z-50 flex w-full flex-col items-center bg-background bg-opacity-100">
       <header className="flex w-full flex-row flex-wrap justify-between px-4 py-5 sm:px-8 md:justify-between md:px-16 lg:px-32 xl:px-60">
         <div className="h-10">
           <Button variant={"link"} asChild>
