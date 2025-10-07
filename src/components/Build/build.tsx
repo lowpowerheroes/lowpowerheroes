@@ -20,7 +20,7 @@ const Build: FC<BuildProperties> = (props) => {
           )}
         </div>
 
-        <div className="flex w-full flex-col gap-6 p-6 lg:w-1/2 lg:p-8">
+        <div className="flex w-full flex-col gap-6 p-6 lg:w-1/2 lg:p-8 lg:max-h-[85vh] lg:overflow-y-auto">
           <div className="border-b border-border pb-4">
             <h1 className="mb-2 flex justify-between text-4xl font-extrabold tracking-tight text-primary">
               <span>{props.build_name}</span>
