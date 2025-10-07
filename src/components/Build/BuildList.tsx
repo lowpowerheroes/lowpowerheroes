@@ -5,6 +5,7 @@ import Build from "~/components/Build/build";
 import { useEffect, useRef } from "react";
 import type { inferProcedureOutput } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
+import BuildCard from "./BuildCard";
 
 type InitialData = inferProcedureOutput<AppRouter["build"]["getInfinite"]>;
 
@@ -53,7 +54,14 @@ export function BuildList({ initialBuilds }: BuildListProps) {
     <>
       <div className="flex w-full flex-wrap justify-center gap-4">
         {allBuilds.map((b) => (
-          <Build key={b.build_id} {...b} />
+          <div key={b.build_id} className="w-full lg:w-auto">
+            <div className="hidden lg:block">
+              <Build key={b.build_id} {...b} />
+            </div>
+            <div className="block lg:hidden">
+              <BuildCard key={b.build_id} {...b} build_images={b.images} />
+            </div>
+          </div>
         ))}
       </div>
 
